@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Birthday Surprise</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+section{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:black;
+color:white;
+text-align:center;
+position:relative;
+}
+
+/* BUTTON */
+
+button{
+padding:12px 28px;
+font-size:18px;
+border:none;
+border-radius:25px;
+background:#ff4da6;
+color:white;
+cursor:pointer;
+box-shadow:0 0 15px #ff4da6;
+}
+
+/* NEXT BUTTON CENTER */
+
+.next{
+position:absolute;
+bottom:40px;
+left:50%;
+transform:translateX(-50%);
+}
+
+/* VIDEO */
+
+video{
+width:100%;
+height:100vh;
+object-fit:cover;
+}
+
+/* WISHES */
+
+.wish{
+font-size:30px;
+line-height:1.6;
+}
+
+/* PHOTO TITLE */
+
+.title{
+font-size:55px;
+margin-bottom:80px;
+text-shadow:0 0 20px pink;
+}
+
+/* PHOTO ROTATION */
+
+.gallery{
+position:relative;
+width:180px;
+height:180px;
+transform-style:preserve-3d;
+animation:rotate 20s linear infinite;
+}
+
+.gallery img{
+position:absolute;
+width:180px;
+height:180px;
+object-fit:cover;
+border-radius:20px;
+box-shadow:0 0 20px pink;
+}
+
+.gallery img:nth-child(1){transform:rotateY(0deg) translateZ(320px);}
+.gallery img:nth-child(2){transform:rotateY(45deg) translateZ(320px);}
+.gallery img:nth-child(3){transform:rotateY(90deg) translateZ(320px);}
+.gallery img:nth-child(4){transform:rotateY(135deg) translateZ(320px);}
+.gallery img:nth-child(5){transform:rotateY(180deg) translateZ(320px);}
+.gallery img:nth-child(6){transform:rotateY(225deg) translateZ(320px);}
+.gallery img:nth-child(7){transform:rotateY(270deg) translateZ(320px);}
+.gallery img:nth-child(8){transform:rotateY(315deg) translateZ(320px);}
+
+@keyframes rotate{
+from{transform:rotateY(0)}
+to{transform:rotateY(360deg)}
+}
+
+/* FINAL TEXT */
+
+.final{
+font-size:60px;
+text-shadow:0 0 30px #ff4da6;
+}
+
+/* HORIZONTAL PARTICLE ANIMATION */
+
+#wrap{
+transform:rotate(90deg);
+}
+
+canvas{
+display:block;
+}
+
+/* FIX NEXT BUTTON ROTATION IN SECTION 3 */
+
+#sec3 .next{
+transform:translateX(-50%) rotate(-90deg);
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- SECTION 1 -->
+
+<section id="sec1">
+
+<h1 style="font-size:70px">Hey... Wait!</h1>
+<br>
+
+<button onclick="showSection(2)">Click Here</button>
+
+</section>
+
+
+
+<!-- SECTION 2 VIDEO -->
+
+<section id="sec2" style="display:none">
+
+<video id="bdayVideo" autoplay muted>
+<source src="video.mp4" type="video/mp4">
+</video>
+
+</section>
+
+
+
+<!-- SECTION 3 ANIMATION -->
+
+<section id="sec3" style="display:none">
+
+<div id="wrap">
+<canvas id="c"></canvas>
+</div>
+
+<button class="next" onclick="showSection(4)">Next ➜</button>
+
+</section>
+
+
+
+<!-- SECTION 4 WISHES -->
+
+<section id="sec4" style="display:none">
+
+<div class="wish">
+
+You are my favorite person ❤️ <br>
+My partner in crime 😎 <br>
+My best memory maker ✨ <br><br>
+
+Happy Birthday 🎂
+
+</div>
+
+<button class="next" onclick="showSection(5)">Next ➜</button>
+
+</section>
+
+
+
+<!-- SECTION 5 PHOTOS -->
+
+<section id="sec5" style="display:none">
+
+<h1 class="title">Happiest Birthday</h1>
+
+<audio id="bdaySong" loop>
+<source src="song.mp3">
+</audio>
+
+<div class="gallery">
+
+<img src="p1.jpg">
+<img src="p2.jpg">
+<img src="p3.jpg">
+<img src="p4.jpg">
+<img src="p5.jpg">
+<img src="p6.jpg">
+<img src="p7.jpg">
+<img src="p8.jpg">
+
+</div>
+
+<button class="next" onclick="showSection(6)">Next ➜</button>
+
+</section>
+
+
+
+<!-- SECTION 6 FINAL -->
+
+<section id="sec6" style="display:none">
+
+<div class="final">
+
+HAPPY BIRTHDAY <br>
+MY CRIME PARTNER ❤️
+
+</div>
+
+</section>
+
+
+
+<script>
+
+/* SECTION CHANGE */
+
+function showSection(n){
+
+for(let i=1;i<=6;i++){
+document.getElementById("sec"+i).style.display="none"
+}
+
+document.getElementById("sec"+n).style.display="flex"
+
+/* SONG CONTROL */
+
+let song=document.getElementById("bdaySong")
+
+if(n==5){
+song.play()
+}else{
+song.pause()
+song.currentTime=0
+}
+
+}
+
+
+
+/* VIDEO END → START ANIMATION */
+
+document.getElementById("bdayVideo").addEventListener("ended",function(){
+
+showSection(3)
+
+setTimeout(()=>{
+startAnimation()
+},200)
+
+})
+
+
+
+/* PARTICLE ANIMATION (ORIGINAL) */
+
+const canvas=document.getElementById("c")
+const ctx=canvas.getContext("2d")
+
+canvas.width=window.innerHeight
+canvas.height=window.innerWidth
+
+let particles=[]
+
+const texts=[
+"Happy Birthday",
+"To My Crime Partner"
+]
+
+function createText(text){
+
+particles=[]
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+let size=canvas.width<900?60:80
+
+ctx.fillStyle="white"
+ctx.font="bold "+size+"px Arial"
+ctx.textAlign="center"
+
+ctx.fillText(text,canvas.width/2,canvas.height/2)
+
+let data=ctx.getImageData(0,0,canvas.width,canvas.height).data
+
+for(let y=0;y<canvas.height;y+=4){
+for(let x=0;x<canvas.width;x+=4){
+
+let index=(y*canvas.width+x)*4
+
+if(data[index+3]>150){
+
+particles.push({
+x:Math.random()*canvas.width,
+y:-Math.random()*canvas.height,
+tx:x,
+ty:y,
+speed:3+Math.random()*2
+})
+
+}
+
+}
+}
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+}
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+particles.forEach(p=>{
+
+if(p.y<p.ty){
+p.y+=p.speed
+}
+
+p.x+=(p.tx-p.x)*0.02
+p.y+=(p.ty-p.y)*0.02
+
+ctx.fillStyle="#ff4da6"
+
+ctx.shadowBlur=20
+ctx.shadowColor="#ff4da6"
+
+ctx.beginPath()
+ctx.arc(p.x,p.y,2,0,Math.PI*2)
+ctx.fill()
+
+})
+
+requestAnimationFrame(animate)
+
+}
+
+function startAnimation(){
+
+createText(texts[0])
+animate()
+
+setTimeout(()=>{
+createText(texts[1])
+},4200)
+
+}
+
+</script>
+
+</body>
+</html>
